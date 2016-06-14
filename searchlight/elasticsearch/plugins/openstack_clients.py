@@ -17,6 +17,7 @@ import os
 from cinderclient import client as cinder_client
 from designateclient.v2 import client as designate_client
 from glanceclient import client as glance_client
+from ironicclient import client as ironic_client
 from keystoneclient import auth as ks_auth
 from keystoneclient import session as ks_session
 import keystoneclient.v2_0.client as ks_client
@@ -70,6 +71,24 @@ def get_glanceclient():
         region_name=cfg.CONF.service_credentials.os_region_name
     )
 
+
+def get_ironicclient():
+    session = _get_session()
+
+    kwargs = {
+        'session': session,
+        'os_endpoint_type': cfg.CONF.service_credentials.os_endpoint_type,
+        'os_region_name': cfg.CONF.service_credentials.os_region_name
+    }
+
+    client = ironic_client.get_client(
+        api_version=1,
+        session=session,
+        os_endpoint_type=cfg.CONF.service_credentials.os_endpoint_type,
+        os_region_name=cfg.CONF.service_credentials.os_region_name
+    )
+
+    return client
 
 def get_novaclient():
     session = _get_session()
