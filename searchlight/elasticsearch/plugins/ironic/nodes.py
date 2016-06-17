@@ -36,12 +36,20 @@ class NodeIndex(base.IndexBase):
     def get_document_type(cls):
         return resource_types.IRONIC_NODE
 
+    @classmethod
+    def get_plugin_name(cls):
+        return 'Node'
+
     def get_document_id_field(self):
         return 'uuid'
 
     @property
     def facets_with_options(self):
-        return ('driver')
+        # TODO: Enable more fields
+        return ('driver_info.ipmi_username', 'extra.health', 'extra.model',
+                'extra.type', 'extra.manufacturer', 'extra.interfaces',
+                'extra.interfaces.iface_0.local_link_connection.switch_info',
+                'extra.interfaces.iface_0.address')
 
     def _get_rbac_field_filters(self, request_context):
         return []
@@ -51,7 +59,104 @@ class NodeIndex(base.IndexBase):
             'dynamic': True,
             'properties': {
                 'uuid': {'type': 'string', 'index': 'not_analyzed'},
-                'driver': {'type': 'string', 'index': 'not_analyzed'}
+                'driver': {'type': 'string', 'index': 'not_analyzed'},
+                'clean_step': {'type': 'string'},
+                'console_enabled': {'type': 'boolean'},
+                'cpu_arch': {'type': 'string'},
+                'cpus': {'type': 'string'},
+                'created_at': {'type': 'date'},
+                'driver_info': {
+                    'type': 'nested',
+                    'properties': {
+                        'deploy_kernel': {
+                            'type': 'string',
+                            'index': 'not_analyzed'
+                        },
+                        'deploy_ramdisk': {
+                            'type': 'string',
+                            'index': 'not_analyzed'
+                        },
+                        'ipmi_address': {
+                            'type': 'string'
+                        },
+                        'ipmi_terminal_port': {
+                            'type': 'long'
+                        },
+                        'ipmi_username': {
+                            'type': 'string'
+                        }
+                    }
+                },
+                'extra': {
+                    'type': 'nested',
+                    'properties': {
+                        'health': {
+                            'type': 'string',
+                            'index': 'not_analyzed'
+                        },
+                        'serial_number': {
+                            'type': 'string',
+                            'index': 'not_analyzed'
+                        },
+                        'model': {
+                            'type': 'string',
+                            'index': 'not_analyzed'
+                        },
+                        'type': {
+                            'type': 'string',
+                            'index': 'not_analyzed'
+                        },
+                        'rack': {
+                            'type': 'string',
+                            'index': 'not_analyzed'
+                        },
+                        'unit': {
+                            'type': 'string',
+                            'index': 'not_analyzed'
+                        },
+                        'manufacturer': {
+                            'type': 'string',
+                            'index': 'not_analyzed'
+                        },
+                        'interfaces': {
+                            'type': 'nested',
+                            'properties': {
+                                'iface_0': {
+                                    'type': 'nested',
+                                    'properties': {
+                                        'pxe_enabled': {'type': 'boolean'},
+                                        'address': {'type': 'string'},
+                                        'local_link_connection': {
+                                            'type': 'nested',
+                                            'properties': {
+                                                'switch_info': {
+                                                    'type': 'string',
+                                                    'index': 'not_analyzed'
+                                                },
+                                                'port_id': {
+                                                    'type': 'string',
+                                                    'index': 'not_analyzed'
+                                                },
+                                                'switch_id': {
+                                                    'type': 'string',
+                                                    'index': 'not_analyzed'
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                'instance_uuid': {'type': 'string', 'index': 'not_analyzed'},
+                'local''_gb': {'type': 'long'},
+                'maintenance': {'type': 'boolean'},
+                'memory_mb': {'type': 'long'},
+                'power_state': {'type': 'string', 'index': 'not_analyzed'},
+                'provision_state': {'type': 'string', 'index': 'not_analyzed'},
+                'provision_updated_at': {'type': 'date'},
+                'updated_at': {'type': 'date'}
             }
         }
 

@@ -34,10 +34,28 @@ def serialize_ironic_node(node):
 
     document = node.to_dict()
 
+    # Move properties up
     for k, v in six.iteritems(document.pop('properties', {})):
         document[k] = v
+    return _ignore_fields(document)
 
-    fields_to_ignore = ['instance_info', 'links']
-    document = {k: v for k, v in document.iteritems() if k not in fields_to_ignore}
+
+def _ignore_fields(document):
+
+    instance_info = document.get('instance_info', {})
+    driver_info = document.get('driver_info', {})
+
+    # TODO: track Ironic ports as separate objects
+    fields_to_ignore = ['instance_info', 'links', 'clean_step', 'ports',
+                        'driver_internal_info']
+    instance_fields_to_ignore = ['configdrive', 'image_url']
+    driver_info_fields_to_ignore = ['ipmi_password']
+
+    document = {k: v for k, v in document.iteritems()
+                if k not in fields_to_ignore}
+    document['instance_info'] = {k: v for k, v in instance_info.iteritems()
+                                 if k not in instance_fields_to_ignore}
+    document['driver_info'] = {k: v for k, v in driver_info.iteritems()
+                               if k not in driver_info_fields_to_ignore}
 
     return document

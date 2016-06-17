@@ -32,7 +32,6 @@ class NodeHandler(base.NotificationBase):
     def __init__(self, *args, **kwargs):
         super(NodeHandler, self).__init__(*args, **kwargs)
 
-    # TODO: where is it used?
     @classmethod
     def _get_notification_exchanges(cls):
         return ['ironic']
@@ -43,9 +42,9 @@ class NodeHandler(base.NotificationBase):
         }
 
     def create_or_update(self, payload, timestamp):
-        node_id = payload['id']
+        node_id = payload['uuid']
         try:
-            payload = serialize_ironic_node(payload)
+            payload = serialize_ironic_node(node_id)
             self.index_helper.save_document(
                 payload,
                 version=self.get_version(payload, timestamp))
