@@ -33,10 +33,29 @@ def serialize_ironic_node(node):
         node = ironic_client.node.get(node)
 
     document = node.to_dict()
-    return _ignore_fields(document)
+    return _ignore_node_fields(document)
 
 
-def _ignore_fields(document):
+def serialize_ironic_port(port):
+
+    # If we're being asked to index an ID, retrieve the full node information
+    if isinstance(port, six.text_type):
+        # TODO: test this
+        ironic_client = openstack_clients.get_ironicclient()
+        port = ironic_client.port.get(port)
+
+    document = port.to_dict()
+    return _ignore_port_fields(document)
+
+
+def _ignore_port_fields(document):
+    fields_to_ignore = ['links']
+    document = {k: v for k, v in document.iteritems()
+                if k not in fields_to_ignore}
+    return document
+
+
+def _ignore_node_fields(document):
 
     instance_info = document.get('instance_info', {})
     driver_info = document.get('driver_info', {})

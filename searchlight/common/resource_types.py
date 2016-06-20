@@ -17,6 +17,7 @@ GLANCE_IMAGE = "OS::Glance::Image"
 GLANCE_METADEF = "OS::Glance::Metadef"
 
 IRONIC_NODE = "OS::Ironic::Node"
+IRONIC_PORT = "OS::Ironic::Port"
 
 CINDER_SNAPSHOT = "OS::Cinder::Snapshot"
 CINDER_VOLUME = "OS::Cinder::Volume"

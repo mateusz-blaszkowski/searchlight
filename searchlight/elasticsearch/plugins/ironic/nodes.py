@@ -325,8 +325,7 @@ class NodeIndex(base.IndexBase):
         }
 
     def get_objects(self):
-        from searchlight.elasticsearch.plugins import openstack_clients
-        return openstack_clients.get_ironicclient().node.list(detail=True)
+        return []
 
     def serialize(self, obj):
         return serialize_ironic_node(obj)
