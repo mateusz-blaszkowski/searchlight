@@ -33,10 +33,6 @@ def serialize_ironic_node(node):
         node = ironic_client.node.get(node)
 
     document = node.to_dict()
-
-    # Move properties up
-    for k, v in six.iteritems(document.pop('properties', {})):
-        document[k] = v
     return _ignore_fields(document)
 
 

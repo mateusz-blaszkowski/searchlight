@@ -45,11 +45,23 @@ class NodeIndex(base.IndexBase):
 
     @property
     def facets_with_options(self):
-        # TODO: Enable more fields
-        return ('driver_info.ipmi_username', 'extra.health', 'extra.model',
-                'extra.type', 'extra.manufacturer', 'extra.interfaces',
+        return ('console_enabled', 'driver', 'driver_info.ipmi_username',
+                'extra.health', 'extra.model', 'extra.type',
+                'extra.manufacturer', 'maintenance', 'power_state',
+                'properties.cpu_arch', 'properties.capabilities',
+                'provision_state',
                 'extra.interfaces.iface_0.local_link_connection.switch_info',
-                'extra.interfaces.iface_0.address')
+                'extra.interfaces.iface_0.pxe_enabled',
+                'extra.interfaces.iface_1.local_link_connection.switch_info',
+                'extra.interfaces.iface_1.pxe_enabled',
+                'extra.interfaces.iface_2.local_link_connection.switch_info',
+                'extra.interfaces.iface_2.pxe_enabled',
+                'extra.interfaces.iface_3.local_link_connection.switch_info',
+                'extra.interfaces.iface_3.pxe_enabled',
+                'extra.interfaces.iface_4.local_link_connection.switch_info',
+                'extra.interfaces.iface_4.pxe_enabled',
+                'extra.interfaces.iface_5.local_link_connection.switch_info',
+                'extra.interfaces.iface_5.pxe_enabled')
 
     def _get_rbac_field_filters(self, request_context):
         return []
@@ -58,13 +70,10 @@ class NodeIndex(base.IndexBase):
         return {
             'dynamic': True,
             'properties': {
-                'uuid': {'type': 'string', 'index': 'not_analyzed'},
-                'driver': {'type': 'string', 'index': 'not_analyzed'},
                 'clean_step': {'type': 'string'},
                 'console_enabled': {'type': 'boolean'},
-                'cpu_arch': {'type': 'string'},
-                'cpus': {'type': 'string'},
                 'created_at': {'type': 'date'},
+                'driver': {'type': 'string', 'index': 'not_analyzed'},
                 'driver_info': {
                     'type': 'nested',
                     'properties': {
@@ -144,19 +153,174 @@ class NodeIndex(base.IndexBase):
                                             }
                                         }
                                     }
+                                },
+                                'iface_1': {
+                                    'type': 'nested',
+                                    'properties': {
+                                        'pxe_enabled': {'type': 'boolean'},
+                                        'address': {'type': 'string'},
+                                        'local_link_connection': {
+                                            'type': 'nested',
+                                            'properties': {
+                                                'switch_info': {
+                                                    'type': 'string',
+                                                    'index': 'not_analyzed'
+                                                },
+                                                'port_id': {
+                                                    'type': 'string',
+                                                    'index': 'not_analyzed'
+                                                },
+                                                'switch_id': {
+                                                    'type': 'string',
+                                                    'index': 'not_analyzed'
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                'iface_2': {
+                                    'type': 'nested',
+                                    'properties': {
+                                        'pxe_enabled': {'type': 'boolean'},
+                                        'address': {'type': 'string'},
+                                        'local_link_connection': {
+                                            'type': 'nested',
+                                            'properties': {
+                                                'switch_info': {
+                                                    'type': 'string',
+                                                    'index': 'not_analyzed'
+                                                },
+                                                'port_id': {
+                                                    'type': 'string',
+                                                    'index': 'not_analyzed'
+                                                },
+                                                'switch_id': {
+                                                    'type': 'string',
+                                                    'index': 'not_analyzed'
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                'iface_3': {
+                                    'type': 'nested',
+                                    'properties': {
+                                        'pxe_enabled': {'type': 'boolean'},
+                                        'address': {'type': 'string'},
+                                        'local_link_connection': {
+                                            'type': 'nested',
+                                            'properties': {
+                                                'switch_info': {
+                                                    'type': 'string',
+                                                    'index': 'not_analyzed'
+                                                },
+                                                'port_id': {
+                                                    'type': 'string',
+                                                    'index': 'not_analyzed'
+                                                },
+                                                'switch_id': {
+                                                    'type': 'string',
+                                                    'index': 'not_analyzed'
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                'iface_4': {
+                                    'type': 'nested',
+                                    'properties': {
+                                        'pxe_enabled': {'type': 'boolean'},
+                                        'address': {'type': 'string'},
+                                        'local_link_connection': {
+                                            'type': 'nested',
+                                            'properties': {
+                                                'switch_info': {
+                                                    'type': 'string',
+                                                    'index': 'not_analyzed'
+                                                },
+                                                'port_id': {
+                                                    'type': 'string',
+                                                    'index': 'not_analyzed'
+                                                },
+                                                'switch_id': {
+                                                    'type': 'string',
+                                                    'index': 'not_analyzed'
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                'iface_5': {
+                                    'type': 'nested',
+                                    'properties': {
+                                        'pxe_enabled': {'type': 'boolean'},
+                                        'address': {'type': 'string'},
+                                        'local_link_connection': {
+                                            'type': 'nested',
+                                            'properties': {
+                                                'switch_info': {
+                                                    'type': 'string',
+                                                    'index': 'not_analyzed'
+                                                },
+                                                'port_id': {
+                                                    'type': 'string',
+                                                    'index': 'not_analyzed'
+                                                },
+                                                'switch_id': {
+                                                    'type': 'string',
+                                                    'index': 'not_analyzed'
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
                 },
+                'instance_info': {
+                    'type': 'nested',
+                    'properties': {
+                        'display_name': {
+                            'type': 'string', 'index': 'not_analyzed'
+                        },
+                        'image_source': {
+                            'type': 'string', 'index': 'not_analyzed'
+                        },
+                        'image_type': {
+                            'type': 'string', 'index': 'not_analyzed'
+                        },
+                        'local_gb': {'type': 'long'},
+                        'memory_mb': {'type': 'long'},
+                        'root_gb': {'type': 'long'},
+                        'vcpus': {'type': 'long'},
+                    }
+                },
                 'instance_uuid': {'type': 'string', 'index': 'not_analyzed'},
-                'local''_gb': {'type': 'long'},
+                'last_error': {'type': 'string'},
                 'maintenance': {'type': 'boolean'},
-                'memory_mb': {'type': 'long'},
+                'maintenance_reason': {'type': 'string'},
+                'name': {
+                    'type': 'string',
+                    'fields': {
+                        'raw': {'type': 'string', 'index': 'not_analyzed'}
+                    }
+                },
                 'power_state': {'type': 'string', 'index': 'not_analyzed'},
+                'properties': {
+                    'type': 'nested',
+                    'properties': {
+                        'cpu_arch': {'type': 'string', 'index': 'not_analyzed'},
+                        'cpus': {'type': 'string'},
+                        'memory_mb': {'type': 'long'},
+                        'local_gb': {'type': 'long'},
+                        'capabilities': {'type': 'string'}
+                    }
+                },
                 'provision_state': {'type': 'string', 'index': 'not_analyzed'},
                 'provision_updated_at': {'type': 'date'},
-                'updated_at': {'type': 'date'}
+                'updated_at': {'type': 'date'},
+                'uuid': {'type': 'string', 'index': 'not_analyzed'}
             }
         }
 
